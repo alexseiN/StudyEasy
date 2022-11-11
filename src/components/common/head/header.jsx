@@ -22,6 +22,7 @@ const Header = () => {
                     <li><Link to = "/Comment">Reviews</Link></li>
                     <li><Link to = "/Login">Login</Link></li>
                     <li><Link to = "/Profile">Profile</Link></li>
+                    <li><Link to = "/Resources">Resources</Link></li>
                 </ul>
                 <div className='start'>
                     <div className='button'>
