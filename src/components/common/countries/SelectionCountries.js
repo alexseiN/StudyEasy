@@ -3,7 +3,7 @@ import Map from './Map'
 import "./selection_countries.css";
 
   
-export const Selection_countries = () => {
+export const SelectionCountries = () => {
   window.scrollTo(0,0);
   const ref = useRef(null);
   const handleClick = () => {
