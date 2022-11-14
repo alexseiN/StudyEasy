@@ -13,6 +13,7 @@ import { Unirecord } from './universities/forjson/unirecord';
 import CreateComment from "../../Pages/CreateComment";
 import Comment from "../../Pages/Comment";
 import Profile from "./user/Profile";
+import Posts from '../../Pages/Posts';
 import Resources from '../../Pages/Resources';
 import AddResource from '../../Pages/AddResource';
 
@@ -43,6 +44,7 @@ function AnimationRoutes() {
         <Route path="/CreateComment" exact element={<CreateComment/>} />
         <Route path="/Comment" exact element={<Comment />} />
         <Route path="/Profile" exact element={<Profile />} />
+        <Route path="/Posts" exact element={<Posts />} />
         <Route path="/Resources" exact element={<Resources />} />
         <Route path="/AddResource" exact element={<AddResource/>} />
 

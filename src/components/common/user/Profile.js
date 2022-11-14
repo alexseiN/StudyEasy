@@ -14,7 +14,18 @@ export default function Profile(){
     const currentUser = auth.currentUser
 
     const usersPersonalDataCollectionRef = collection(db, "usersPersonalData")
+
+    let navigate = useNavigate();
+
+    const routeChange = () => {
+        let path = `/Login`;
+        navigate(path);
+    }
+
+
     useEffect(()=> {
+        if (currentUser === null) routeChange()
+
         const getUserInfo = async()=> {
             const data = await getDocs(usersPersonalDataCollectionRef)
             data.docs.map((doc)=>{
@@ -29,12 +40,6 @@ export default function Profile(){
         getUserInfo();
     },[])
 
-    let navigate = useNavigate();
-
-    const routeChange = () => {
-        let path = `/Login`;
-        navigate(path);
-    }
 
     const handleSave = () => {
         if (newUser === null) {
@@ -61,6 +66,9 @@ export default function Profile(){
         <div class="container rounded bg-white mt-5 mb-5">
             <div class="row" style={{ width:"100%" }}>
                 <div class="col-md-3 border-right">
+                    <div class="profile-image">
+                        <img src="../../../images/ambassadors/forum.jpeg" className="rounded profile-photo" alt="profile"/>
+                    </div>
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5"><span class="font-weight-bold">{firstName}</span><span class="text-black-50">{lastName}</span><span> </span></div>
                 </div>
                 <div class="col-md-9 border-right">
