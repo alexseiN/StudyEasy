@@ -7,31 +7,31 @@ import { useNavigate } from "react-router-dom";
 import {collection,getDocs,addDoc,updateDoc,doc,deleteDoc} from 'firebase/firestore';
 export default function Posts() {
 
-    const [resources,setResources]= useState([]);
-    const userCollectionRef=collection(db,"Resources");
+    const [posts,setPosts]= useState([]);
+    const userCollectionRef=collection(db,"Posts");
     let navigate = useNavigate(); 
     const routeChange = () =>{ 
-        navigate("/AddResource");
+        navigate("/AddPosts");
       };
     
       useEffect(()=>{
-        const getResources = async()=>{
+        const getPosts = async()=>{
           const data=await getDocs(userCollectionRef);
-          setResources(data.docs.map((doc)=>({...doc.data(),id:doc.id})));
+          setPosts(data.docs.map((doc)=>({...doc.data(),id:doc.id})));
         };
-        getResources();
+        getPosts();
       },[]);
 
 
-    const handleDelete = (id) => {
-        deleteDoc(doc(db,"Resources", id))
-        document.getElementById(id).style.display = "none"
-        alert("Deleted Successfully!")
-    }
+    // const handleDelete = (id) => {
+    //     deleteDoc(doc(db,"Posts", id))
+    //     document.getElementById(id).style.display = "none"
+    //     alert("Deleted Successfully!")
+    // }
 
-    const handleUpdate = (id) => {
-        navigate("/AddResource?id="+id);
-    }
+    // const handleUpdate = (id) => {
+    //     navigate("/AddPosts?id="+id);
+    // }
 
   return (
     <>
@@ -40,20 +40,26 @@ export default function Posts() {
             <h1>Study Easy</h1>
         </div>
         <div className='tboxC'>
-        {resources.map((item)=>{
+        {posts.map((item)=>{
             return(
                 
-                    <div className='tbox-resource' id={item.id}>
-                        <div className='box-top'>
-                            <h1><strong>{item.title}</strong></h1>
+                    <div className='tbox-resource d-flex align-items-center' id={item.id}>
+                      <div className="d-inline-block image-part">
+                          <img alt="not fount" className="post-image" src={item.image} />
                         </div>
-                        <div className='client-comment'>
+
+                        <div className="d-inline-block">
+                        <div className='box-top'>
+                            <h5><strong>{item.title}</strong></h5>
+                        </div>
+                        <div className='client-comment text-align-left'>
                             <p>{item.description}</p>
                         </div>
-                        <div className="box-bottom">
-                            <a href={item.url} target="blank"><button className="btn-info">View More</button></a>
+
+                        {/* <div className="box-bottom">
                             <button className="btn-warning" onClick={e => {e.preventDefault(); handleDelete(item.id)}}>Delete</button>
                             <button className="btn-primary" onClick={e => {e.preventDefault(); handleUpdate(item.id)}}>Update</button>
+                        </div> */}
                         </div>
                     </div>
             
@@ -62,7 +68,6 @@ export default function Posts() {
         })}
 
         </div>
-        <button className='primary-btn' onClick={routeChange}>Add New Resource</button>;
     </div>
     
     </>

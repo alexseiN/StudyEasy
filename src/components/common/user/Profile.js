@@ -4,6 +4,7 @@ import { collection, getDocs, updateDoc, doc, deleteDoc, onSnapshot, addDoc, ser
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
 import './profile.css';
+import forum from "../../../images/ambassadors/forum.jpeg";
 
 export default function Profile(){
     const[getUser,setGetUser] = useState([])
@@ -11,7 +12,11 @@ export default function Profile(){
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [newUser, setNewUser] = useState(null)
+    const [avatar, setAvatar] = useState(forum);
     const currentUser = auth.currentUser
+    const [posts,setPosts]= useState([]);
+    const postCollectionRef=collection(db,"Posts");
+
 
     const usersPersonalDataCollectionRef = collection(db, "usersPersonalData")
 
@@ -22,6 +27,11 @@ export default function Profile(){
         navigate(path);
     }
 
+    const handleDelete = (id) => {
+        deleteDoc(doc(db,"Posts", id))
+        document.getElementById(id).style.display = "none"
+        alert("Deleted Successfully!")
+    }
 
     useEffect(()=> {
         if (currentUser === null) routeChange()
@@ -38,6 +48,12 @@ export default function Profile(){
             })
         }
         getUserInfo();
+        const getPosts = async()=>{
+            const data=await getDocs(postCollectionRef);
+            setPosts(data.docs.map((doc)=>({...doc.data(),id:doc.id})));
+          };
+          getPosts();
+  
     },[])
 
 
@@ -62,12 +78,17 @@ export default function Profile(){
             alert("Profile Updated")
         }
     }
+
+    const handlePost = () => {
+        navigate('/AddPosts');
+    }
+
     return (
         <div class="container rounded bg-white mt-5 mb-5">
             <div class="row" style={{ width:"100%" }}>
                 <div class="col-md-3 border-right">
-                    <div class="profile-image">
-                        <img src="../../../images/ambassadors/forum.jpeg" className="rounded profile-photo" alt="profile"/>
+                    <div class="profile-image d-flex flex-column align-items-center text-center">
+                        <img src={avatar} className="rounded profile-photo" alt="profile"/>
                     </div>
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5"><span class="font-weight-bold">{firstName}</span><span class="text-black-50">{lastName}</span><span> </span></div>
                 </div>
@@ -86,13 +107,40 @@ export default function Profile(){
                         <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" onClick={handleSave}>Save Profile</button></div>
                     </div>
                 </div>
-                {/* <div class="col-md-4">
+                <div class="col-md-12">
                     <div class="p-3 py-5">
-                        <div class="d-flex justify-content-between align-items-center experience"><span>Additional Profile</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br/>
-                        <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></input></div> <br />
-                        <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></input></div>
+                        <div class="d-flex justify-content-between align-items-center experience"><span>User Posts</span></div><br/>
+
+                        {posts.map((item)=>{
+                            if (item.uid === currentUser.uid) {
+                                return(
+                                    <div id={item.id}>
+                                    <div className='tbox-resource d-flex align-items-center'>
+                                        <div className="d-inline-block image-part">
+                                        <img alt="not fount" className="post-image" src={item.image} />
+                                        </div>
+
+                                        <div className="d-inline-block main-part">
+                                            <div className='box-top'>
+                                                <h5><strong>{item.title}</strong></h5>
+                                            </div>
+                                            <div className='client-comment'>
+                                                <p>{item.description}</p>
+                                            </div>
+
+                                            <div className="box-bottom">
+                                                <button className="btn-warning" onClick={e => {e.preventDefault(); handleDelete(item.id)}}>Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                )
+                            }
+                        })}
+
+                        <div class="mt-5 text-center"><button class="btn btn-info" type="button" onClick={handlePost}>New Post</button></div>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     )

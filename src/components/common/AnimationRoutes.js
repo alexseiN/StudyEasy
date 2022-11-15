@@ -11,6 +11,7 @@ import { Team } from './teams/team';
 import { Search } from './search/search';
 import { Unirecord } from './universities/forjson/unirecord';
 import CreateComment from "../../Pages/CreateComment";
+import AddPosts from "../../Pages/AddPosts";
 import Comment from "../../Pages/Comment";
 import Profile from "./user/Profile";
 import Posts from '../../Pages/Posts';
@@ -45,6 +46,7 @@ function AnimationRoutes() {
         <Route path="/Comment" exact element={<Comment />} />
         <Route path="/Profile" exact element={<Profile />} />
         <Route path="/Posts" exact element={<Posts />} />
+        <Route path="/AddPosts" exact element={<AddPosts />} />
         <Route path="/Resources" exact element={<Resources />} />
         <Route path="/AddResource" exact element={<AddResource/>} />
 
